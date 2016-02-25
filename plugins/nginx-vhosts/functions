@@ -174,6 +174,11 @@ nginx_build_config() {
 
     local NONSSL_VHOSTS=$(get_app_domains "$APP")
     local NOSSL_SERVER_NAME=$(echo "$NONSSL_VHOSTS" | xargs)
+    local BARE_VHOSTS=""
+    for host in $NOSSL_SERVER_NAME; do
+      BARE_VHOSTS="$BARE_VHOSTS `echo $host | cut -d'.' -f1`"
+    done
+    NOSSL_SERVER_NAME="$NOSSL_SERVER_NAME $BARE_VHOSTS"
     if is_ssl_enabled "$APP"; then
       local SSL_INUSE=true; local SCHEME=https
       validate_ssl_domains "$APP"
