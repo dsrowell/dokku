@@ -320,6 +320,7 @@ nginx_build_config() {
     local SSL_INUSE=
     local NONSSL_VHOSTS=$(get_app_domains "$APP")
     local NOSSL_SERVER_NAME=$(echo "$NONSSL_VHOSTS" | xargs)
+    local NOSSL_SERVER_ALIAS=$(echo "$NONSSL_VHOSTS" | cut -d'.' -f1)
     if is_ssl_enabled "$APP"; then
       local SSL_INUSE=true
       local SCHEME=https
@@ -388,6 +389,7 @@ nginx_build_config() {
       eval "$(config_export app "$APP")"
       local SIGIL_PARAMS=(-f "$NGINX_TEMPLATE" APP="$APP" DOKKU_ROOT="$DOKKU_ROOT"
         NOSSL_SERVER_NAME="$NOSSL_SERVER_NAME"
+        NOSSL_SERVER_ALIAS="$NOSSL_SERVER_ALIAS"
         DOKKU_APP_LISTENERS="$DOKKU_APP_LISTENERS"
         DOKKU_LIB_ROOT="$DOKKU_LIB_ROOT"
         PASSED_LISTEN_IP_PORT="$PASSED_LISTEN_IP_PORT"
